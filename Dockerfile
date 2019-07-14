@@ -4,27 +4,8 @@ USER root
 
 RUN apt-get update -y
 
-RUN apt-get install -y git \
-    && apt-get install -y aria2
-
 # Need gcc for phonenumbers
-RUN apt-get install -y gcc
-
-USER $NB_USER
-
-RUN conda config --set auto_update_conda False
-RUN conda install -y -c conda-forge geopandas=0.5
-
-RUN conda install -y -c conda-forge jupyter_contrib_nbextensions \
-    && conda install -y jupyter_dashboards \
-    && conda install -y -c conda-forge rise \
-    && pip install autopep8
-
-RUN pip install clkhash \
-    && pip install phonenumbers \
-    && pip install recordlinkage
-
-USER root
+RUN apt-get install -y gcc git
 
 # Libpostal
 RUN apt-get install -y curl autoconf automake libtool pkg-config  \
@@ -37,14 +18,36 @@ RUN apt-get install -y curl autoconf automake libtool pkg-config  \
     && make install \
     && ldconfig
 
-RUN conda clean -t
+USER $NB_USER
 
+RUN conda config --set auto_update_conda False
+RUN conda install -y -c conda-forge geopandas=0.5 \
+    rtree \
+    psycopg2
+
+RUN conda install -y -c conda-forge jupyter_contrib_nbextensions \
+    jupyter_dashboards \
+    rise \
+    matplotlib \
+    geoplot \
+    cartopy
+
+RUN conda install -y -c conda-forge phonenumbers
+
+RUN pip install clkhash \
+    && pip install recordlinkage
+
+# postal is the Python bindings for libpostal
+RUN pip install postal
+
+RUN conda install -y -c conda-forge sqlalchemy geoalchemy2
+
+USER root
+
+RUN conda clean -t
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 USER $NB_USER
-
-# postal is the Python bindings for libpostal
-RUN pip install postal
 
 WORKDIR /home/jovyan/
