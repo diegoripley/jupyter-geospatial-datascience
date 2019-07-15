@@ -30,7 +30,11 @@ RUN conda install -y -c conda-forge jupyter_contrib_nbextensions \
     rise \
     matplotlib \
     geoplot \
-    cartopy
+    cartopy \
+    earthsim \
+    bokeh \
+    folium \
+    geoviews
 
 RUN conda install -y -c conda-forge phonenumbers
 
