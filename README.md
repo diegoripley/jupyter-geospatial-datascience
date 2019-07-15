@@ -35,7 +35,7 @@ OSM extracts are available from two sources:
 
 ```bash
 cd data
-wget -c -O country.pbf http://download.openstreetmap.fr/extracts/central-america/saint_kitts_and_nevis.osm.pbf
+wget -c -O data.osm.pbf http://download.openstreetmap.fr/extracts/central-america/saint_kitts_and_nevis.osm.pbf
 ```
 
 You must put only one PBF file in the `data` folder. Only the last one will be read.
