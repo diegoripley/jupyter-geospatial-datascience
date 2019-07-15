@@ -39,3 +39,8 @@ wget -c -O country.pbf http://download.openstreetmap.fr/extracts/central-america
 ```
 
 You must put only one PBF file in the `data` folder. Only the last one will be read.
+
+## Load OSM Data
+```
+osm2pgsql --latlong --database gis --username docker --host osm_db /data/data.osm.pbf 
+```
