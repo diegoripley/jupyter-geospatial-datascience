@@ -4,7 +4,7 @@ services:
     container_name: prasc_notebook
     ports: ["8888:8888"]
     volumes:
-      - './data:/home/jovyan/work'
-    image: prasc_rle
+      - './data:/data'
+      - './notebooks:/home/jovyan/work/notebooks'
+    image: diegoripley/prasc_rle
     command: "jupyter notebook --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''"
-
