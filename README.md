@@ -24,3 +24,18 @@ docker-compose up -d
 ```
 
 And open your browser to your [Jupyter Notebook](http://localhost:8888).
+
+## Download OSM Data
+In this example, we will set up an OSM database for 
+
+First get a PBF file from your area and put this file in the `data` folder.
+OSM extracts are available from two sources:
+* http://download.openstreetmap.fr/extracts/
+* http://download.geofabrik.de/
+
+```bash
+cd data
+wget -c -O country.pbf http://download.openstreetmap.fr/extracts/central-america/saint_kitts_and_nevis.osm.pbf
+```
+
+You must put only one PBF file in the `data` folder. Only the last one will be read.
