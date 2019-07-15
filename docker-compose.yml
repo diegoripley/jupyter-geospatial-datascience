@@ -1,10 +1,25 @@
 version: '3'
 services:
+  db:
+    image: kartoza/postgis:11.0-2.5
+    hostname: osm_db
+    container_name: osm_db
+    env_file: settings.env
+    volumes:
+      - db-data:/var/lib/postgresql
+    ports: ['35432:5432']
   notebook:
+    image: prasc_rle
+    #image: diegoripley/prasc_rle
     container_name: prasc_notebook
-    ports: ["8888:8888"]
+    env_file: settings.env
+    ports: ['8888:8888']
+    depends_on:
+      - db
     volumes:
       - './data:/data'
       - './notebooks:/home/jovyan/work/notebooks'
-    image: diegoripley/prasc_rle
     command: "jupyter notebook --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''"
+
+volumes:
+  db-data:
