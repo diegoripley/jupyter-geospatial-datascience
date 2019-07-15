@@ -48,6 +48,12 @@ RUN conda install -y -c conda-forge sqlalchemy geoalchemy2
 
 USER root
 
+# For loading OSM data into osm_db (see docker-compose.yml)
+RUN apt-get install -y osm2pgsql
+
+#
+RUN conda install -y -c conda-forge qgrid
+
 RUN conda clean -t
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
