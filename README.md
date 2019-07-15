@@ -26,7 +26,7 @@ docker-compose up -d
 And open your browser to your [Jupyter Notebook](http://localhost:8888).
 
 ## Download OSM Data
-In this example, we will set up an OSM database for 
+In this example, we will set up an OSM database for [Saint Kitts and Nevis](https://en.wikipedia.org/wiki/Saint_Kitts_and_Nevis)
 
 First get a PBF file from your area and put this file in the `data` folder.
 OSM extracts are available from two sources:
