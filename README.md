@@ -2,8 +2,11 @@
 
 The container image includes:
 
+- [clkhash](https://github.com/data61/clkhash) - a Python implementation of cryptographic longterm key hashing
 - [geopandas](http://geopandas.org/) -  for processing spatial data
 - [phonenumbers](https://github.com/daviddrysdale/python-phonenumbers) - for parsing and validating phone numbers
+- [libpostal](https://github.com/openvenues/libpostal) - for parsing/normalizing street addresses
+- [osm2pgsql] - for loading OpenStreetMap data into a database
 - [recordlinkage](https://github.com/J535D165/recordlinkage)
 
 ## Installing 
