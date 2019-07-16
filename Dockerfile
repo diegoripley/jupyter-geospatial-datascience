@@ -21,38 +21,39 @@ RUN apt-get install -y curl autoconf automake libtool pkg-config  \
 USER $NB_USER
 
 RUN conda config --set auto_update_conda False
-RUN conda install -y -c conda-forge geopandas=0.5 \
-    rtree \
-    psycopg2
-
-RUN conda install -y -c conda-forge jupyter_contrib_nbextensions \
-    jupyter_dashboards \
-    rise \
-    matplotlib \
-    geoplot \
-    cartopy \
-    earthsim \
+RUN conda install -y -c conda-forge \
     bokeh \
-    folium \
-    geoviews
+    geopandas=0.5 \
+    geoplot \
+    geoviews \
+    jupyter_contrib_nbextensions \
+    jupyter_dashboards \
+    qgrid \
+    matplotlib \
+    psycopg2 \
+    rise \
+    rtree \
+    yapf # for code linting
 
-RUN conda install -y -c conda-forge phonenumbers
+RUN conda install -y -c conda-forge \
+        sqlalchemy \
+        geoalchemy2
 
-RUN pip install clkhash \
-    && pip install recordlinkage
+## Record linkage
+RUN conda install -y -c conda-forge \
+        phonenumbers
+
+RUN pip install --no-cache-dir clkhash recordlinkage
 
 # postal is the Python bindings for libpostal
-RUN pip install postal
+RUN pip install --no-cache-dir postal
 
-RUN conda install -y -c conda-forge sqlalchemy geoalchemy2
 
 USER root
 
 # For loading OSM data into osm_db (see docker-compose.yml)
 RUN apt-get install -y osm2pgsql
 
-#
-RUN conda install -y -c conda-forge qgrid
 
 RUN conda clean -t
 RUN apt-get clean \
