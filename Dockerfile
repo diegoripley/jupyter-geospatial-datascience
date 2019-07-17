@@ -38,7 +38,7 @@ RUN conda install -y -c conda-forge \
 RUN conda install -y -c conda-forge \
         sqlalchemy \
         geoalchemy2 \
-        jupytertext # https://github.com/mwouts/jupytext
+        jupytext # https://github.com/mwouts/jupytext
 
 ## Record linkage
 RUN conda install -y -c conda-forge \
