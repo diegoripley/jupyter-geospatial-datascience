@@ -2,6 +2,9 @@ FROM jupyter/base-notebook
 
 USER root
 
+RUN echo 'Acquire::HTTP::Proxy "http://10.1.10.100:3142";' >> /etc/apt/apt.conf.d/01proxy \
+ && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/01proxy
+
 RUN apt-get update -y
 
 # Need gcc for phonenumbers
@@ -10,18 +13,36 @@ RUN apt-get install -y gcc git
 # Libpostal
 RUN apt-get install -y curl autoconf automake libtool pkg-config  \
     && cd /opt \
-    && git clone https://github.com/openvenues/libpostal libpostal-git \
+    && git clone --depth=1 https://github.com/openvenues/libpostal libpostal-git \
     && cd libpostal-git \
     && ./bootstrap.sh \
-    && ./configure --datadir=/opt/ \
-    && make -j4 \
+    && ./configure --disable-data-download --datadir=/data/ \
+    && make -j \
     && make install \
     && ldconfig
 
+# For loading OSM data into osm_db (see docker-compose.yml)
+## osm2pgsql
+RUN apt-get install -y make cmake g++ libboost-dev libboost-system-dev \
+  libboost-filesystem-dev libexpat1-dev zlib1g-dev \
+  libbz2-dev libpq-dev libproj-dev lua5.2 liblua5.2-dev \
+  postgresql-client
+
+# Enable LuaJIT support
+RUN apt-get install -y libluajit-5.1-dev
+
+RUN cd /opt \
+    && git clone https://github.com/openstreetmap/osm2pgsql.git \
+    && cd osm2pgsql \
+    && mkdir build \
+    && cd build \
+    && cmake -D WITH_LUAJIT=ON .. \
+    && make -j \
+    && make install
+
 USER $NB_USER
 
-RUN conda config --set auto_update_conda False \
-    && conda update -n base conda -c conda-forge -y
+RUN conda config --set auto_update_conda False
 
 ## Record linkage
 RUN conda install -y -c conda-forge \
@@ -44,9 +65,10 @@ RUN pip install --no-cache-dir postal
 
 RUN conda install -y -c conda-forge \
     autopep8 \
-    isort # For sorting Python imports \
+    isort \
     qgrid \
     rise \
+    tqdm \
     jupyter_contrib_nbextensions \
     jupytext # https://github.com/mwouts/jupytext
 
@@ -73,15 +95,13 @@ RUN jupyter nbextension enable code_prettify/code_prettify \
 
 USER root
 
-# For loading OSM data into osm_db (see docker-compose.yml)
-RUN apt-get install -y osm2pgsql
-
 RUN conda clean -t
+
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && fix-permissions $CONDA_DIR \
     && fix-permissions /home/$NB_USER
 
-USER $NB_USER
+#USER $NB_USER
 
 WORKDIR /home/jovyan/
