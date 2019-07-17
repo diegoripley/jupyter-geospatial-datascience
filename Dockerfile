@@ -37,7 +37,8 @@ RUN conda install -y -c conda-forge \
 
 RUN conda install -y -c conda-forge \
         sqlalchemy \
-        geoalchemy2
+        geoalchemy2 \
+        jupytertext # https://github.com/mwouts/jupytext
 
 ## Record linkage
 RUN conda install -y -c conda-forge \
@@ -48,12 +49,10 @@ RUN pip install --no-cache-dir clkhash recordlinkage
 # postal is the Python bindings for libpostal
 RUN pip install --no-cache-dir postal
 
-
 USER root
 
 # For loading OSM data into osm_db (see docker-compose.yml)
 RUN apt-get install -y osm2pgsql
-
 
 RUN conda clean -t
 RUN apt-get clean \
